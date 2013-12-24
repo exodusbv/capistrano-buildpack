@@ -23,12 +23,13 @@ if Capistrano::Configuration.instance
     def read_env(name)
       env = {}
       filename = ".env.#{name}"
-      return env unless File.exists?(filename)
-
-      File.open(".env.#{name}") do |f|
-        f.each do |line|
-          key, val = line.split('=', 2)
-          env[key] = val
+      
+      if File.exists?(filename)
+        File.open(".env.#{name}") do |f|
+          f.each do |line|
+            key, val = line.split('=', 2)
+            env[key] = val
+          end
         end
       end
 
