@@ -69,7 +69,7 @@ if Capistrano::Configuration.instance
         run("[[ ! -e #{foreman_export_nginx_path} ]] && git clone #{foreman_export_nginx_url} #{foreman_export_nginx_path}; exit 0")
         run("cd #{foreman_export_nginx_path} && git fetch origin && git reset --hard origin/master && git pull origin master")
         run("cd #{foreman_export_nginx_path} && gem build foreman-export-nginx.gemspec")
-        sudo "gem install #{foreman_export_nginx_path}/foreman-export-nginx-#{foreman_export_nginx_version}.gem")
+        sudo "gem install #{foreman_export_nginx_path}/foreman-export-nginx-#{foreman_export_nginx_version}.gem"
       end
 
       task "compile" do
