@@ -18,8 +18,6 @@ if Capistrano::Configuration.instance
     _cset :foreman_export_path, "/etc/init"
     _cset :foreman_export_type, "upstart"
     _cset :nginx_export_path, "/etc/nginx/conf.d"
-    _cset :nginx_binary, "/opt/nginx/sbin/nginx"
-    _cset :nginx_conf, "/etc/nginx/nginx.conf"
     _cset :additional_domains, []
 
     def read_env(name)
@@ -97,7 +95,7 @@ if Capistrano::Configuration.instance
         sudo "foreman export #{foreman_export_type} #{foreman_export_path} -d #{release_path} -l /var/log/#{application} -a #{application} -u #{app_user} -p #{base_port} -c #{concurrency}"
         sudo "env #{_use_ssl} #{_ssl_cert_path} #{_ssl_key_path} #{_force_ssl} #{_force_domain} ADDITIONAL_DOMAINS=#{additional_domains.join(',')} #{_default_server} BASE_DOMAIN=$CAPISTRANO:HOST$ nginx-foreman export nginx #{nginx_export_path} -d #{release_path} -l /var/log/apps -a #{application} -u #{app_user} -p #{base_port} -c #{concurrency}"
         sudo "service #{application} restart || service #{application} start"
-        sudo "#{nginx_binary} -c #{nginx_conf} -s reload || #{nginx_binary} -c #{nginx_conf} -s stop && #{nginx_binary} -c #{nginx_conf}"
+        sudo "/etc/init.d/nginx reload"
       end
 
     end
