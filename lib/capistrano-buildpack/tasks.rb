@@ -98,7 +98,8 @@ if Capistrano::Configuration.instance
 
         sudo "foreman export #{foreman_export_type} #{foreman_export_path} -d #{release_path} -l /var/log/#{application} -a #{application} -u #{app_user} -p #{base_port} -c #{concurrency}"
         sudo "env #{_use_ssl} #{_ssl_cert_path} #{_ssl_key_path} #{_force_ssl} #{_force_domain} ADDITIONAL_DOMAINS=#{additional_domains.join(',')} #{_default_server} BASE_DOMAIN=$CAPISTRANO:HOST$ nginx-foreman export nginx #{nginx_export_path} -d #{release_path} -l /var/log/apps -a #{application} -u #{app_user} -p #{base_port} -c #{concurrency}"
-        sudo "service #{application} restart || service #{application} start"
+        sudo "chmod +x /etc/init.d/#{application}"
+        sudo "/etc/init.d/#{application} restart || /etc/init.d/start"
         sudo "/etc/init.d/nginx reload"
       end
 
