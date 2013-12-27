@@ -71,6 +71,10 @@ if Capistrano::Configuration.instance
         run("cd #{foreman_export_nginx_path} && gem build foreman-export-nginx.gemspec")
         sudo "gem install #{foreman_export_nginx_path}/foreman-export-nginx-#{foreman_export_nginx_version}.gem"
       end
+      
+      task "install_foreman_export_initscript" do
+        sudo "gem install foreman-export-initscript --update"
+      end
 
       task "compile" do
         run("cd #{buildpack_path} && RACK_ENV=production bin/compile #{release_path} #{shared_path}/.build/build_cache")
@@ -104,6 +108,7 @@ if Capistrano::Configuration.instance
     before "deploy:setup",           "buildpack:setup_env"
     before "deploy:setup",           "buildpack:setup"
     after  "deploy:setup",           "buildpack:install_foreman_export_nginx"
+    after  "deploy:setup",           "buildpack:install_foreman_export_initscript"
     before "deploy",                 "buildpack:setup"
     before "deploy:finalize_update", "buildpack:compile"
     after  "deploy:create_symlink",  "buildpack:foreman_export"
